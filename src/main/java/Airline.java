@@ -1,17 +1,30 @@
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class Airline implements IAir {
     private ArrayList<Flight> flights;
     private ArrayList<Passenger> allPassengers;
+    private ArrayList<Passenger> registeredUsers;
+
     private int uniqueId;
     private String name;
 
     public Airline(String name) {
         flights = new ArrayList<>();
+        registeredUsers = new ArrayList<>();
+        allPassengers = new ArrayList<>();
         this.name = name;
+    }
+
+    public void registerUser(Passenger passenger) {
+        registeredUsers.add(passenger);
     }
     public void addFlight(Flight flight) {
         flights.add(flight);
+    }
+
+    public void addMultipleFlights(ArrayList<Flight> newFlights) {
+        flights.addAll(newFlights);
     }
 
     public void addPassengerToFlight(Passenger passenger, Flight flight) {

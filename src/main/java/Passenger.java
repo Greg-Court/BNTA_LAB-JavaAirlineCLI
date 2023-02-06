@@ -2,21 +2,23 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Passenger {
-    private String name;
-    private String surname;
+    private String firstName;
+    private String lastName;
     private String number;
     private String email;
     private String customerId;
     private Airline airline;
     private boolean checkedIn;
     private ArrayList<Flight> flights;
+    private int currentAccount;
 
-    public Passenger(String name, String surname, String number, String email, Airline airline) {
-        this.name = name;
-        this.surname = surname;
+    public Passenger(String firstName, String lastName, String number, String email, Airline airline, int money) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.number = number;
         this.email = email;
         this.customerId = generateId(airline);
+        this.currentAccount = money;
     }
 
     public String generateId(Airline airline){
@@ -28,20 +30,28 @@ public class Passenger {
         // return id;
     }
 
-    public String getName() {
-        return name;
+    public void displayFlights() {
+        int flightIndex = 1;
+        for (Flight flight : flights) {
+            System.out.println(flightIndex + ". " + flight.getFlightID() + " " + flight.getDestination() + " on " + flight.getDate());
+            flightIndex++;
+        }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getFirstName() {
+        return firstName;
     }
-    
-    public String getSurname(){
-        return surname;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
-    
-    public void setSurname(){
-        this.surname = surname;
+
+    public String getLastName(){
+        return lastName;
+    }
+
+    public void setLastName(String lastName){
+        this.lastName = lastName;
         }
 
     public String getNumber() {
@@ -67,7 +77,7 @@ public class Passenger {
     public void addFlightToPassenger(Flight flight) {
         flights.add(flight);
     }
-    
+
     public void removeFlightFromPassenger(Flight flight) {
         flights.remove(flight);
     }
@@ -75,4 +85,6 @@ public class Passenger {
     public ArrayList<Flight> getFlights() {
         return flights;
     }
+
+
 }
