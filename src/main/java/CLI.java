@@ -152,10 +152,10 @@ public class CLI {
                 case 2:
                     // Book a flight -----------------------------------------------------------------------
                     System.out.println("You selected option 2: Book a flight");
-                    System.out.println("Please select an option from the following flights");
                     // print all available flights from all airlines
                     if (user != null) {
                         // declare a variable called selectedAirportFlightIndex int = userinput int - 1
+                        System.out.println("Please select an option from the following flights:\n");
                         airport.displayFlights();
                         int selectedAirportFlightIndex = sc.nextInt() - 1;
 
@@ -184,12 +184,13 @@ public class CLI {
                 case 3:
                     // Check In -----------------------------------------------------------------------
                     System.out.println("You selected option 3: Check in");
-                    user.displayBookedFlights();
-                    int selectedFlightIndex = sc.nextInt() - 1;
+
 
                     if (user != null) {
                         if (user.getBookedFlights().size() > 0) {
+                            user.displayBookedFlights();
                             System.out.println("Please select which flight you'd like to check in for");
+                            int selectedFlightIndex = sc.nextInt() - 1;
                             if (selectedFlightIndex >= 0 && selectedFlightIndex <= user.getBookedFlights().size()) {
                                 Flight flightToCheckIn = user.getBookedFlights().get(selectedFlightIndex);
                                 System.out.println("You have successfully checked in flight " + flightToCheckIn.getFlightID()
@@ -203,6 +204,8 @@ public class CLI {
                             break;
                         }
 
+                    } else {
+                        System.out.println("Please register first.");
                     }
                     break;
 
