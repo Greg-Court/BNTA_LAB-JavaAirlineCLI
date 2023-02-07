@@ -96,7 +96,7 @@ public class CLI {
 
             int option = 0;
             boolean selection = true;
-            System.out.println("Please enter a option between 1 - 9");
+            System.out.println("Please select an option between 1 - 9.");
 
             while (selection) {
                 try {
@@ -105,10 +105,10 @@ public class CLI {
                     if (option <= 9 && option >= 1) {
                         selection = false;
                     } else {
-                        System.out.println("Invalid input. Please enter a number between 1-9");
+                        System.out.println("Invalid input. Please select an option between 1 - 9.");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number between 1-9");
+                    System.out.println("Invalid input. Please select an option between 1 - 9.");
                     sc.nextLine();
                 }
             }
@@ -144,11 +144,14 @@ public class CLI {
                     boolean mobile = true;
                     while (mobile) {
                         try {
-                            number = Integer.toString(Integer.parseInt(sc.nextLine()));
-                            mobile = false;
+                            number = Long.toString(Long.parseLong(sc.nextLine()));
+                            if (number.length() >= 10) {
+                                mobile = false;
+                            } else {
+                                System.out.println("Invalid input. Please enter a valid number.");
+                            }
                         } catch (NumberFormatException e) {
                             System.out.println("Invalid input. Please enter a valid number.");
-
                         }
                     }
 
@@ -254,22 +257,34 @@ public class CLI {
 
                 case 4:
                     // Display all available flights -----------------------------------------------------------------------
-                    System.out.println("You selected option 4: Display all available flights");
-                    System.out.println("Here are currently available flights:");
-                    airport.displayFlights();
+                    if (user != null) {
+                        System.out.println("You selected option 4: Display all available flights");
+                        System.out.println("Here are currently available flights:");
+                        airport.displayFlights();
+                    } else {
+                        System.out.println("Please register first.");
+                    }
                     break;
 
                 case 5:
-                    System.out.println("Please enter the first letter of your destination");
-                    char destinationChar = sc.nextLine().toUpperCase().charAt(0);
-                    System.out.println("Here are all the destinations matching your search criteria:\n");
-                    airport.searchDestination(destinationChar);
+                    if (user != null) {
+                        System.out.println("Please enter the first letter of your destination");
+                        char destinationChar = sc.nextLine().toUpperCase().charAt(0);
+                        System.out.println("Here are all the destinations matching your search criteria:\n");
+                        airport.searchDestination(destinationChar);
+                    } else {
+                        System.out.println("Please register first.");
+                    }
 
                     break;
 
                 case 6:
-                    System.out.println("Here is a list of all your currently booked flights: ");
-                    user.displayBookedFlights();
+                    if (user != null) {
+                        System.out.println("Here is a list of all your currently booked flights: ");
+                        user.displayBookedFlights();
+                    } else {
+                        System.out.println("Please register first.");
+                    }
 
                     break;
                 case 7:
@@ -340,10 +355,10 @@ public class CLI {
                                             if (indexToCancel >= 0 && indexToCancel <= airport.getAllAirportFlights().size()) {
                                                 Flight flightToCancel = airport.allAirportFlights.get(indexToCancel);
                                                 airport.removeFlight(flightToCancel);
-                                                System.out.println("Flight " + flightToCancel.getFlightID() + " to " + 
+                                                System.out.println("Flight " + flightToCancel.getFlightID() + " to " +
                                                         flightToCancel.getDestination() + " on " + flightToCancel.getDate() + " successfully cancelled.");
                                             }
-                                            
+
                                             break;
                                         case 2:
                                             System.out.println("Please enter the flight destination.");

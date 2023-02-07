@@ -59,6 +59,11 @@ public class Airport implements IAir {
 
     public void removeFlight(Flight flight) {
         this.getAllAirportFlights().remove(flight);
+        for (Airline airline : airlines) {
+            if (airline.getFlights().contains(flight)) {
+                airline.getFlights().remove(flight);
+            }
+        }
     }
 
     @Override
