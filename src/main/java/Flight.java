@@ -8,12 +8,14 @@ public class Flight {
     private String flightID;
     private LocalDate date;
     private ArrayList<Passenger> passengers;
+    private int price;
 
 
     public Flight(String destination, LocalDate date) {
         this.destination = destination;
         this.date = date;
         this.flightID = generateId(destination);
+        this.price = generatePrice();
     }
 
 
@@ -22,6 +24,10 @@ public class Flight {
         int randomNumber = random.nextInt(900) + 100;
         String countryIdentifier = destination.substring(0,3).toUpperCase();
         return countryIdentifier + Integer.toString(randomNumber);
+    }
+    public int generatePrice() {
+        Random random = new Random();
+        return random.nextInt(2000 + 1) + 500;
     }
 
     public String getFlightID() {

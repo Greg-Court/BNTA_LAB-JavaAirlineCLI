@@ -9,9 +9,9 @@ public class CLI {
 
         Airport airport = new Airport("Joe Mama Airport");
 
-        Airline joeLine = new Airline("Joe Mama Air");
-        Airline rydLine = new Airline("RydAIR");
-        Airline gregLine = new Airline("GregAIRious");
+        Airline joeLine = new Airline("Joe Mama Air", airport);
+        Airline rydLine = new Airline("RydAIR", airport);
+        Airline gregLine = new Airline("GregAIRious", airport);
 
         airport.addAirline(joeLine);
         airport.addAirline(rydLine);
@@ -55,34 +55,53 @@ public class CLI {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("\nWelcome to the Joe Mama Airport Self-Service Kiosk.");
-        System.out.println("Please insert your bank card and select one of the following options to continue.");
 
-        int passengerBalance = sc.nextInt();
+        boolean loop = true;
+        int passengerBalance = 0;
 
-        while (true) {
+        while (loop) {
+            try {
+                System.out.println("Please insert your bank card to continue.");
+                passengerBalance = sc.nextInt();
+                loop = false;
+            }
+            catch(Exception e) {
+                System.out.println("Error: Invalid card. Please insert a valid bank card.");
+                sc.nextLine();
+                continue;
+            }
+        }
+
+
+        Passenger user = null;
+        boolean runProgam = true;
+
+        while (runProgam) {
             System.out.println("\n1. Register");
             System.out.println("2. Book a flight");
             System.out.println("3. Check in");
             System.out.println("4. Display all available flights");
             System.out.println("5. Cancel your flight\n");
+            System.out.println("6. Add a new flight - ADMIN ACCESS REQUIRED");
+            System.out.println("7. Exit");
             int option = sc.nextInt();
             switch (option) {
                 case 1:
                     // Register to an airline -----------------------------------------------------------------------
                     System.out.println("You selected option 1: Register");
 
-                    System.out.println("\nPlease select which airline you'd like to register with by entering its index number.");
-                    Airline selectedAirline = null;
-                    airport.displayAirlines();
-                    int selectedAirlineIndex = sc.nextInt() - 1;
-                    sc.nextLine();
-
-                    if (selectedAirlineIndex >= 0 && selectedAirlineIndex < airport.getAirlines().size()) {
-                        selectedAirline = airport.getAirlines().get(selectedAirlineIndex);
-                        System.out.println("You have selected airline: " + selectedAirline.getName());
-                    } else {
-                        System.out.println("Invalid airline index selected. Please try again.");
-                    }
+//                    System.out.println("\nPlease select which airline you'd like to register with by entering its index number.");
+//                    Airline selectedAirline = null;
+//                    airport.displayAirlines();
+//                    int selectedAirlineIndex = sc.nextInt() - 1;
+//                    sc.nextLine();
+//
+//                    if (selectedAirlineIndex >= 0 && selectedAirlineIndex < airport.getAirlines().size()) {
+//                        selectedAirline = airport.getAirlines().get(selectedAirlineIndex);
+//                        System.out.println("You have selected airline: " + selectedAirline.getName());
+//                    } else {
+//                        System.out.println("Invalid airline index selected. Please try again.");
+//                    }
 
                     System.out.print("Enter your first name: ");
                     String firstName = sc.nextLine();
@@ -123,10 +142,10 @@ public class CLI {
                         }
                     }
 
-                    Passenger user = new Passenger(firstName, lastName, number, email, selectedAirline, passengerBalance);
-                    selectedAirline.registerUser(user);
+                    user = new Passenger(firstName, lastName, number, email, passengerBalance);
+                    airport.addRegisteredUser(user);
 
-                    System.out.println("You have successfully registered with " + selectedAirline.getName() + ". ");
+                    System.out.println("You have successfully registered on our airport system. ");
                     System.out.println("Returning to main menu.");
                     break;
 
@@ -135,44 +154,105 @@ public class CLI {
                     System.out.println("You selected option 2: Book a flight");
                     System.out.println("Please select an option from the following flights");
                     // print all available flights from all airlines
-                    // allow user to select a flight by number
+                    airport.displayFlights();
+                    if (user != null) {
+                        // declare a variable called selectedAirportFlightIndex int = userinput int - 1
+                        int selectedAirportFlightIndex = sc.nextInt() - 1;
+
+                        // putting the flight in the passenger arraylist
+                        if (selectedAirportFlightIndex >= 0 && selectedAirportFlightIndex <= airport.getAllAirportFlights().size()) {
+                            Flight selectedFlight = airport.getAllAirportFlights().get(selectedAirportFlightIndex);
+                            if (user.getBookedFlights().contains(selectedFlight)) {
+                                System.out.println("You have already booked this flight.");
+                            } else {
+                                System.out.println("You have successfully booked flight " + selectedFlight.getFlightID() +
+                                        " to " + selectedFlight.getDestination() + " on " + selectedFlight.getDate());
+
+                                // putting the flight in the passenger arraylist
+                                user.addFlightToPassenger(selectedFlight);
+                                System.out.println("\n Here is a list of all your booked flights:");
+                                user.displayBookedFlights();
+                            }
+                        } else {
+                            System.out.println("Please select a valid option.");
+                        }
+                    } else {
+                        System.out.println("Please register first.");
+                    }
                     break;
 
                 case 3:
                     // Check In -----------------------------------------------------------------------
                     System.out.println("You selected option 3: Check in");
-                    System.out.println("Please select which flight you'd like to check in for");
-                    // display current user's available flights (only ones they have booked)
+                    user.displayBookedFlights();
+                    int selectedFlightIndex = sc.nextInt() - 1;
+
+                    if (user != null) {
+                        if (user.getBookedFlights().size() > 0) {
+                            System.out.println("Please select which flight you'd like to check in for");
+                            if (selectedFlightIndex >= 0 && selectedFlightIndex <= user.getBookedFlights().size()) {
+                                Flight flightToCheckIn = user.getBookedFlights().get(selectedFlightIndex);
+                                System.out.println("You have successfully checked in flight " + flightToCheckIn.getFlightID()
+                                        + " to " + flightToCheckIn.getDestination() + " on " + flightToCheckIn.getDate());
+                                user.checkInFlight(flightToCheckIn);
+                                System.out.println("Here is a list of all your checked in flights: ");
+                                user.displayCheckedInFlights();
+                            }
+                        } else {
+                            System.out.println("No booked flights available. Please book a flight first.");
+                            break;
+                        }
+
+                    }
                     break;
+
 
                 case 4:
                     // Display all available flights -----------------------------------------------------------------------
                     System.out.println("You selected option 4: Display all available flights");
                     System.out.println("Here are currently available flights:");
-
                     airport.displayFlights();
                     break;
 
                 case 5:
                     // Cancel your flight -----------------------------------------------------------------------
                     System.out.println("You selected option 5: Cancel your flight");
-                    System.out.println("Please select a flight you'd like to cancel. Please be aware that you will incur a cancellation fee of £1000.");
 
-                    user.displayFlights();
 
-                    int selectedPassengerFlightIndex = sc.nextInt() - 1;
+                    if (user != null) {
+                        if (user.getBookedFlights().size() <= 0) {
+                            System.out.println("There are no flights on your account.");
+                            System.out.println("Please book a flight or contact customer service.");
+                            break;
+                        } else {
+                            System.out.println("Please select a flight you'd like to cancel. " +
+                                    "Please be aware that you will incur a cancellation fee of £1000.");
+                            user.displayBookedFlights();
 
-                    if (selectedPassengerFlightIndex >= 0 && selectedPassengerFlightIndex <= user.getFlights().size()) {
-                        Flight selectedFlight = user.getFlights().get(selectedPassengerFlightIndex);
-                        System.out.println("You have successfully cancelled flight " + selectedFlight.getFlightID() + " to " + selectedFlight.getDestination() + " on " + selectedFlight.getDate());
-                        user.getFlights().remove(selectedPassengerFlightIndex);
+                            int selectedPassengerFlightIndex = sc.nextInt() - 1;
+
+                            if (selectedPassengerFlightIndex >= 0 && selectedPassengerFlightIndex <= user.getBookedFlights().size()) {
+                                Flight selectedFlight = user.getBookedFlights().get(selectedPassengerFlightIndex);
+                                System.out.println("You have successfully cancelled flight " + selectedFlight.getFlightID()
+                                        + " to " + selectedFlight.getDestination() + " on " + selectedFlight.getDate());
+                                user.getBookedFlights().remove(selectedPassengerFlightIndex);
+                                if (user.getCheckedInFlights().contains(selectedFlight)) {
+                                    user.removeCheckedInFlights(selectedFlight);
+                                }
+                                System.out.println("Here are your remaining flights: ");
+                                user.displayBookedFlights();
+                            }
+                        }
+                    } else {
+                        System.out.println("Please register first.");
                     }
-
-
                     break;
-
                 default:
                     System.out.println("Invalid option selected. Please try again.");
+                case 6:
+                    break;
+                case 7:
+                    runProgam = false;
             }
         }
 
