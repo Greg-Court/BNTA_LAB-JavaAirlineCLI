@@ -81,9 +81,9 @@ public class CLI {
             System.out.println("2. Book a flight");
             System.out.println("3. Check in");
             System.out.println("4. Display all available flights");
-            System.out.println("5. Cancel your flight\n");
+            System.out.println("5. Cancel your flight");
             System.out.println("6. Add a new flight - ADMIN ACCESS REQUIRED");
-            System.out.println("7. Exit");
+            System.out.println("7. Exit\n");
             int option = sc.nextInt();
             switch (option) {
                 case 1:
