@@ -9,15 +9,15 @@ public class CLI {
     void startCLI() {
 
         Map<String, String> usernamesPasswords = new HashMap<String, String>() {{
-            put("g_dogg", "lol69");
-            put("r_dogg", "lol96");
-            put("joe", "mama");
+            put("Colin", "secretpassword123");
+            put("Ed", "secretpassword123");
+            put("Richard", "secretpassword123");
         }};
 
 
-        Airport airport = new Airport("Joe Mama Airport");
+        Airport airport = new Airport("Joe Airport");
 
-        Airline joeLine = new Airline("Joe Mama Air", airport);
+        Airline joeLine = new Airline("Joe Air", airport);
         Airline rydLine = new Airline("RydAIR", airport);
         Airline gregLine = new Airline("GregAIRious", airport);
 
@@ -257,13 +257,9 @@ public class CLI {
 
                 case 4:
                     // Display all available flights -----------------------------------------------------------------------
-                    if (user != null) {
                         System.out.println("You selected option 4: Display all available flights");
                         System.out.println("Here are currently available flights:");
                         airport.displayFlights();
-                    } else {
-                        System.out.println("Please register first.");
-                    }
                     break;
 
                 case 5:

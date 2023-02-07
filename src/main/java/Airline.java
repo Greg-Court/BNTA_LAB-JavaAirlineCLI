@@ -4,8 +4,9 @@ import java.util.ArrayList;
 public class Airline implements IAir {
     private ArrayList<Flight> flights;
     private ArrayList<Passenger> allPassengers;
+
 //    private ArrayList<Passenger> registeredUsers;
-    
+
     private String name;
     Airport airport;
 
@@ -80,7 +81,7 @@ public class Airline implements IAir {
     public String getName() {
         return name;
     }
-    
+
 
     public ArrayList<Flight> getFlights() {
         return flights;

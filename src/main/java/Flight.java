@@ -18,13 +18,13 @@ public class Flight {
         this.price = generatePrice();
     }
 
-
     public String generateId(String destination) {
         Random random = new Random();
         int randomNumber = random.nextInt(900) + 100;
         String countryIdentifier = destination.substring(0,3).toUpperCase();
         return countryIdentifier + Integer.toString(randomNumber);
     }
+
     public int generatePrice() {
         Random random = new Random();
         return random.nextInt(2000 + 1) + 500;
