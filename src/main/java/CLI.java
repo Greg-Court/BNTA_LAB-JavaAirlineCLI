@@ -154,9 +154,9 @@ public class CLI {
                     System.out.println("You selected option 2: Book a flight");
                     System.out.println("Please select an option from the following flights");
                     // print all available flights from all airlines
-                    airport.displayFlights();
                     if (user != null) {
                         // declare a variable called selectedAirportFlightIndex int = userinput int - 1
+                        airport.displayFlights();
                         int selectedAirportFlightIndex = sc.nextInt() - 1;
 
                         // putting the flight in the passenger arraylist
