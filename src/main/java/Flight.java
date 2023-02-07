@@ -45,4 +45,7 @@ public class Flight {
     public LocalDate getDate() {
         return date;
     }
+    public int getPrice() {
+        return price;
+    }
 }

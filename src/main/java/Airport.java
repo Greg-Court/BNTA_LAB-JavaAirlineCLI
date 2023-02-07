@@ -6,17 +6,20 @@ public class Airport implements IAir {
     ArrayList<Airline> airlines;
     
     ArrayList<Flight> allAirportFlights;
-    
+
     ArrayList<Passenger> registeredUsers;
 
     String name;
 
+    private int uniqueId;
+
     public Airport(String name) {
         airlines = new ArrayList<>();
         allAirportFlights = new ArrayList<>();
+        registeredUsers = new ArrayList<>();
         this.name = name;
     }
-    
+
     public void addRegisteredUser(Passenger passenger) {
         registeredUsers.add(passenger);
     }
@@ -33,21 +36,23 @@ public class Airport implements IAir {
     public void displayFlights() {
         int flightIndex = 1;
         for (Flight flight : allAirportFlights) {
-            System.out.println(flightIndex + ". " + flight.getFlightID() + " " + flight.getDestination() + " " + flight.getDate());
+            System.out.println(flightIndex + ". " + flight.getFlightID() + " " + flight.getDestination()
+                    + " " + flight.getDate() + " £" + flight.getPrice());
             flightIndex++;
         }
     }
 
     @Override
-    public void searchDestination(String destination) {
-        int counter = 1;
-        for (int i = 0; i < airlines.size(); i++) {
-            for (int j = 0; j < airlines.get(i).getFlights().size(); j++ ) {
-                if (airlines.get(i).getFlights().get(j).getDestination().equals(destination)) {
-                    System.out.print(counter++ + ". ");
-                    System.out.print(airlines.get(i).getFlights().get(j).getFlightID() + " ");
-                    System.out.print(airlines.get(i).getFlights().get(j).getDestination() +"\n");
-                }
+    public void searchDestination(char destinationChar) {
+        int counter = 0;
+        for (Flight flight : allAirportFlights) {
+            if (flight.getDestination().toUpperCase().charAt(0) == destinationChar) {
+                System.out.println(flight.getFlightID() + " " + flight.getDestination()
+                        + " " + flight.getDate() + " £" + flight.getPrice());
+                counter++;
+            }
+            if (counter == 0) {
+                System.out.println("Sorry, no destinations starting with " + destinationChar);
             }
         }
     }
@@ -72,5 +77,13 @@ public class Airport implements IAir {
 
     public ArrayList<Flight> getAllAirportFlights() {
         return allAirportFlights;
+    }
+
+    public void incrementUniqueID() {
+        this.uniqueId++;
+    }
+
+    public int getUniqueID() {
+        return uniqueId;
     }
 }

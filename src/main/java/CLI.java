@@ -1,11 +1,19 @@
+import jdk.jshell.spi.ExecutionControl;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 
 public class CLI {
     void startCLI() {
+
+        Map<String, String> usernamesPasswords = new HashMap<String, String>() {{
+            put("g_dogg", "lol69");
+            put("r_dogg", "lol96");
+            put("joe", "mama");
+        }};
+
 
         Airport airport = new Airport("Joe Mama Airport");
 
@@ -81,10 +89,13 @@ public class CLI {
             System.out.println("2. Book a flight");
             System.out.println("3. Check in");
             System.out.println("4. Display all available flights");
-            System.out.println("5. Cancel your flight");
-            System.out.println("6. Add a new flight - ADMIN ACCESS REQUIRED");
-            System.out.println("7. Exit\n");
+            System.out.println("5. Search for flights by destination");
+            System.out.println("6. Cancel your flight");
+            System.out.println("7. Add a new flight - ADMIN ACCESS REQUIRED");
+            System.out.println("8. Exit\n");
             int option = sc.nextInt();
+            sc.nextLine();
+
             switch (option) {
                 case 1:
                     // Register to an airline -----------------------------------------------------------------------
@@ -142,10 +153,12 @@ public class CLI {
                         }
                     }
 
-                    user = new Passenger(firstName, lastName, number, email, passengerBalance);
+                    user = new Passenger(firstName, lastName, number, email, passengerBalance, airport);
                     airport.addRegisteredUser(user);
 
                     System.out.println("You have successfully registered on our airport system. ");
+                    System.out.println("Your unique Customer ID is: " + user.getCustomerID() +"\n");
+
                     System.out.println("Returning to main menu.");
                     break;
 
@@ -218,6 +231,14 @@ public class CLI {
                     break;
 
                 case 5:
+                    System.out.println("Please enter the first letter of your destination");
+                    char destinationChar = sc.nextLine().toUpperCase().charAt(0);
+                    System.out.println("Here are all the destinations matching your search criteria:\n");
+                    airport.searchDestination(destinationChar);
+
+                    break;
+
+                case 6:
                     // Cancel your flight -----------------------------------------------------------------------
                     System.out.println("You selected option 5: Cancel your flight");
 
@@ -252,9 +273,52 @@ public class CLI {
                     break;
                 default:
                     System.out.println("Invalid option selected. Please try again.");
-                case 6:
-                    break;
+
                 case 7:
+                    String userName = null;
+                    String password = null;
+
+                    boolean access = true;
+                    while (access) {
+                        try {
+                            System.out.println("Please enter your username to continue.");
+                            userName = sc.nextLine();
+                            if (usernamesPasswords.containsKey(userName)) {
+                                System.out.println("Please enter your password.");
+                                password = sc.nextLine();
+                                if (usernamesPasswords.get(userName).equals(password)) {
+                                    System.out.println("Welcome back, " + userName + "\n");
+
+                                    System.out.println("Please enter the flight destination.");
+                                    String destinationInput = sc.nextLine();
+                                    System.out.println("Please enter the flight date in the format YYYY-MM-DD.");
+                                    while (true) {
+                                        String dateInput = sc.nextLine();
+                                        try {
+                                            airport.addFlight(new Flight(destinationInput, LocalDate.parse(dateInput)));
+                                            break;
+                                        } catch (DateTimeParseException e) {
+                                            System.out.println("Date format not appropriate. Please try again.");
+                                        }
+                                    }
+                                    System.out.println("You have successfully added a new flight.");
+                                    airport.displayFlights();
+                                } else {
+                                    System.out.println("Invalid password, please try again.");
+                                    continue;
+                                }
+                            } else {
+                                System.out.println("Invalid username. Please enter a valid username.");
+                                continue;
+                            }
+                            access = false;
+                        } catch (Exception e) {
+                            System.out.println("An unexpected error occurred. Please try again.");
+                        }
+                    }
+
+                    break;
+                case 8:
                     runProgam = false;
             }
         }

@@ -7,33 +7,42 @@ public class Passenger {
     private String lastName;
     private String number;
     private String email;
-    private String customerId;
-    private Airline airline;
+    private String customerID;
+    private Airport airport;
     private ArrayList<Flight> bookedFlights;
     private ArrayList<Flight> checkedInFlights;
     private int currentAccount;
 
-    public Passenger(String firstName, String lastName, String number, String email, int money) {
+    public Passenger(String firstName, String lastName, String number, String email, int money, Airport airport) {
         bookedFlights = new ArrayList<>();
         checkedInFlights = new ArrayList<>();
+        this.airport = airport;
         this.firstName = firstName;
         this.lastName = lastName;
         this.number = number;
         this.email = email;
-        this.customerId = generateId(airline);
+        this.customerID = generateId();
         this.currentAccount = money;
     }
 
-    public String generateId(Airline airline){
+    public String generateId(){
         // generate customer Id
-        String airlineIdentifier = airline.getName().substring(0,3).toUpperCase();
-        airline.incrementUniqueID();
-        return airlineIdentifier + String.format("%05d",airline.getUniqueID());
+        String customerIdentifier = this.firstName.substring(0,3).toUpperCase();
+        airport.incrementUniqueID();
+        return customerIdentifier + String.format("%05d",airport.getUniqueID());
         // return id;
     }
 
     public boolean checkIfFlightCheckedIn(Flight flight) {
         return checkedInFlights.contains(flight);
+    }
+
+    public String isFlightCheckedInString(Flight flight) {
+        if (checkedInFlights.contains(flight)) {
+            return "NOT CHECKED IN";
+        } else {
+            return "CHECKED IN";
+        }
     }
 
 
@@ -85,8 +94,8 @@ public class Passenger {
         this.email = email;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public String getCustomerID() {
+        return customerID;
     }
 
     public void addFlightToPassenger(Flight flight) {

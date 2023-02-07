@@ -5,8 +5,7 @@ public class Airline implements IAir {
     private ArrayList<Flight> flights;
     private ArrayList<Passenger> allPassengers;
 //    private ArrayList<Passenger> registeredUsers;
-
-    private int uniqueId;
+    
     private String name;
     Airport airport;
 
@@ -51,6 +50,7 @@ public class Airline implements IAir {
         }
     }
 
+
     public void cancelFlight(Flight flight) {
         flights.remove(flight);
         for (Passenger passenger : allPassengers) {
@@ -61,28 +61,26 @@ public class Airline implements IAir {
     }
 
     @Override
-    public void searchDestination(String destination) {
-        int counter = 1;
-        for (int i = 0; i < flights.size(); i++) {
-            if (flights.get(i).getDestination().equals(destination)) {
-                System.out.print(counter++ + ". ");
-                System.out.print(flights.get(i).getFlightID() + " ");
-                System.out.print(flights.get(i).getDestination() +"\n");
-            }
-        }
+    public void searchDestination(char destination) {
+
     }
+
+//    @Override
+//    public void searchDestination(String destination) {
+//        int counter = 1;
+//        for (int i = 0; i < flights.size(); i++) {
+//            if (flights.get(i).getDestination().equals(destination)) {
+//                System.out.print(counter++ + ". ");
+//                System.out.print(flights.get(i).getFlightID() + " ");
+//                System.out.print(flights.get(i).getDestination() +"\n");
+//            }
+//        }
+//    }
 
     public String getName() {
         return name;
     }
-
-    public void incrementUniqueID() {
-        this.uniqueId++;
-    }
-
-    public int getUniqueID() {
-        return uniqueId;
-    }
+    
 
     public ArrayList<Flight> getFlights() {
         return flights;

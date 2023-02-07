@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public interface IAir {
 
     void displayFlights();
-    void searchDestination(String destination);
+    void searchDestination(char destination);
     
     void addMultipleFlights(ArrayList<Flight> newFlights);
     
