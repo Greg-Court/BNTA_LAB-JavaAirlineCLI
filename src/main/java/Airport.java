@@ -51,10 +51,14 @@ public class Airport implements IAir {
                         + " " + flight.getDate() + " £" + flight.getPrice());
                 counter++;
             }
-            if (counter == 0) {
-                System.out.println("Sorry, no destinations starting with " + destinationChar);
-            }
         }
+        if (counter == 0) {
+            System.out.println("Sorry, no destinations starting with " + destinationChar);
+        }
+    }
+
+    public void removeFlight(Flight flight) {
+        this.getAllAirportFlights().remove(flight);
     }
 
     @Override

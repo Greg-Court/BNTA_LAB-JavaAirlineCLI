@@ -39,9 +39,9 @@ public class Passenger {
 
     public String isFlightCheckedInString(Flight flight) {
         if (checkedInFlights.contains(flight)) {
-            return "NOT CHECKED IN";
-        } else {
             return "CHECKED IN";
+        } else {
+            return "NOT CHECKED IN";
         }
     }
 
@@ -49,7 +49,8 @@ public class Passenger {
     public void displayBookedFlights() {
         int flightIndex = 1;
         for (Flight flight : bookedFlights) {
-            System.out.println(flightIndex + ". " + flight.getFlightID() + " " + flight.getDestination() + " on " + flight.getDate());
+            System.out.println(flightIndex + ". " + flight.getFlightID() + " " + flight.getDestination()
+                    + " on " + flight.getDate() + " - " + isFlightCheckedInString(flight));
             flightIndex++;
         }
     }
@@ -57,7 +58,8 @@ public class Passenger {
     public void displayCheckedInFlights() {
         int flightIndex = 1;
         for (Flight flight : checkedInFlights) {
-            System.out.println(flightIndex + ". " + flight.getFlightID() + " " + flight.getDestination() + " on " + flight.getDate());
+            System.out.println(flightIndex + ". " + flight.getFlightID() + " " + flight.getDestination()
+                    + " on " + flight.getDate());
             flightIndex++;
         }
     }

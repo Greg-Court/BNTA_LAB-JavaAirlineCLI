@@ -72,8 +72,7 @@ public class CLI {
                 System.out.println("Please insert your bank card to continue.");
                 passengerBalance = sc.nextInt();
                 loop = false;
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("Error: Invalid card. Please insert a valid bank card.");
                 sc.nextLine();
                 continue;
@@ -90,11 +89,30 @@ public class CLI {
             System.out.println("3. Check in");
             System.out.println("4. Display all available flights");
             System.out.println("5. Search for flights by destination");
-            System.out.println("6. Cancel your flight");
-            System.out.println("7. Add a new flight - ADMIN ACCESS REQUIRED");
-            System.out.println("8. Exit\n");
-            int option = sc.nextInt();
-            sc.nextLine();
+            System.out.println("6. Display your currently booked flights");
+            System.out.println("7. Cancel your flight");
+            System.out.println("8. Add a new flight or cancel existing flight - ADMIN ACCESS REQUIRED");
+            System.out.println("9. Exit\n");
+
+            int option = 0;
+            boolean selection = true;
+            System.out.println("Please enter a option between 1 - 9");
+
+            while (selection) {
+                try {
+                    option = sc.nextInt();
+                    sc.nextLine();
+                    if (option <= 9 && option >= 1) {
+                        selection = false;
+                    } else {
+                        System.out.println("Invalid input. Please enter a number between 1-9");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number between 1-9");
+                    sc.nextLine();
+                }
+            }
+
 
             switch (option) {
                 case 1:
@@ -121,7 +139,18 @@ public class CLI {
                     String lastName = sc.nextLine();
 
                     System.out.print("Enter your number: ");
-                    String number = sc.nextLine();
+                    String number = null;
+
+                    boolean mobile = true;
+                    while (mobile) {
+                        try {
+                            number = Integer.toString(Integer.parseInt(sc.nextLine()));
+                            mobile = false;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+
+                        }
+                    }
 
                     System.out.print("Enter your email: ");
                     String email = sc.nextLine();
@@ -157,7 +186,7 @@ public class CLI {
                     airport.addRegisteredUser(user);
 
                     System.out.println("You have successfully registered on our airport system. ");
-                    System.out.println("Your unique Customer ID is: " + user.getCustomerID() +"\n");
+                    System.out.println("Your unique Customer ID is: " + user.getCustomerID() + "\n");
 
                     System.out.println("Returning to main menu.");
                     break;
@@ -239,6 +268,11 @@ public class CLI {
                     break;
 
                 case 6:
+                    System.out.println("Here is a list of all your currently booked flights: ");
+                    user.displayBookedFlights();
+
+                    break;
+                case 7:
                     // Cancel your flight -----------------------------------------------------------------------
                     System.out.println("You selected option 5: Cancel your flight");
 
@@ -271,10 +305,9 @@ public class CLI {
                         System.out.println("Please register first.");
                     }
                     break;
-                default:
-                    System.out.println("Invalid option selected. Please try again.");
 
-                case 7:
+
+                case 8:
                     String userName = null;
                     String password = null;
 
@@ -289,20 +322,46 @@ public class CLI {
                                 if (usernamesPasswords.get(userName).equals(password)) {
                                     System.out.println("Welcome back, " + userName + "\n");
 
-                                    System.out.println("Please enter the flight destination.");
-                                    String destinationInput = sc.nextLine();
-                                    System.out.println("Please enter the flight date in the format YYYY-MM-DD.");
-                                    while (true) {
-                                        String dateInput = sc.nextLine();
-                                        try {
-                                            airport.addFlight(new Flight(destinationInput, LocalDate.parse(dateInput)));
+                                    System.out.println("Please choose one of the following options");
+                                    System.out.println("1. Cancel a flight");
+                                    System.out.println("2. Add a new flight");
+
+                                    int userChoice = sc.nextInt();
+                                    sc.nextLine();
+
+                                    switch (userChoice) {
+                                        case 1:
+                                            System.out.println("Please select a flight to delete from the list");
+                                            airport.displayFlights();
+
+                                            int indexToCancel = sc.nextInt() - 1;
+                                            sc.nextLine();
+
+                                            if (indexToCancel >= 0 && indexToCancel <= airport.getAllAirportFlights().size()) {
+                                                Flight flightToCancel = airport.allAirportFlights.get(indexToCancel);
+                                                airport.removeFlight(flightToCancel);
+                                                System.out.println("Flight " + flightToCancel.getFlightID() + " to " + 
+                                                        flightToCancel.getDestination() + " on " + flightToCancel.getDate() + " successfully cancelled.");
+                                            }
+                                            
                                             break;
-                                        } catch (DateTimeParseException e) {
-                                            System.out.println("Date format not appropriate. Please try again.");
-                                        }
+                                        case 2:
+                                            System.out.println("Please enter the flight destination.");
+                                            String destinationInput = sc.nextLine();
+                                            System.out.println("Please enter the flight date in the format YYYY-MM-DD.");
+                                            while (true) {
+                                                String dateInput = sc.nextLine();
+                                                try {
+                                                    airport.addFlight(new Flight(destinationInput, LocalDate.parse(dateInput)));
+                                                    break;
+                                                } catch (DateTimeParseException e) {
+                                                    System.out.println("Date format not appropriate. Please try again.");
+                                                }
+                                            }
+                                            System.out.println("You have successfully added a new flight.");
+                                            airport.displayFlights();
+                                            break;
                                     }
-                                    System.out.println("You have successfully added a new flight.");
-                                    airport.displayFlights();
                                 } else {
                                     System.out.println("Invalid password, please try again.");
                                     continue;
@@ -318,8 +377,11 @@ public class CLI {
                     }
 
                     break;
-                case 8:
+                case 9:
                     runProgam = false;
+
+                default:
+                    System.out.println("Invalid option selected. Please try again.");
             }
         }
 
