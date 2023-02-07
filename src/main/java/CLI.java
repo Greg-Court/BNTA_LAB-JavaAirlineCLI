@@ -96,10 +96,37 @@ public class CLI {
                     System.out.print("Enter your email: ");
                     String email = sc.nextLine();
 
+                    String detailsConfirmation = "no";
+                    while (!detailsConfirmation.equals("yes")) {
+                        System.out.println("Thank you for registering your details.");
+                        System.out.println("Please confirm that the following is correct: ");
+                        System.out.println("Full name: " + firstName + " " + lastName);
+                        System.out.println("Mobile number: " + number);
+                        System.out.println("Email: " + email);
+                        System.out.println("Enter 'yes' to confirm or 'no' to re-enter your details.");
+
+                        detailsConfirmation = sc.nextLine();
+
+                        if (!detailsConfirmation.equals("yes")) {
+                            System.out.println("Please re-enter your details:");
+                            System.out.print("First name: ");
+                            firstName = sc.nextLine();
+
+                            System.out.print("Last name: ");
+                            lastName = sc.nextLine();
+
+                            System.out.print("Mobile Number: ");
+                            number = sc.nextLine();
+
+                            System.out.print("Email: ");
+                            email = sc.nextLine();
+                        }
+                    }
+
                     Passenger user = new Passenger(firstName, lastName, number, email, selectedAirline, passengerBalance);
                     selectedAirline.registerUser(user);
 
-                    System.out.println("You have successfully registered with " + selectedAirline.getName() +". ");
+                    System.out.println("You have successfully registered with " + selectedAirline.getName() + ". ");
                     System.out.println("Returning to main menu.");
                     break;
 
