@@ -62,7 +62,7 @@ public class CLI {
 
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("\nWelcome to the Joe Mama Airport Self-Service Kiosk.");
+        System.out.println("\nWelcome to the Joe's Airport Self-Service Kiosk.");
 
         boolean loop = true;
         int passengerBalance = 0;
